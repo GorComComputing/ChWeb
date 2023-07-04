@@ -35,6 +35,7 @@ function recv(msg) {
     	toast.show()
 }
 
+
 // установка longpoll
 function longpoll2(url, callback) {
 
@@ -60,6 +61,7 @@ function longpoll2(url, callback) {
 
     req.send(null);
 }
+
 
 // действие на странице при получении сообщения с сервера
 function recv2(msg) {

@@ -141,4 +141,16 @@
 				return false;
 			});
 			
+			$('#formRestore').submit(function(){
+				$.ajax({
+					type: "POST",
+					url: "/restore",
+					success: function(html){
+    						$('textarea').val(html);
+				   	}
+					
+				});
+				return false;
+			});
+			
 		});

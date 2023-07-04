@@ -209,7 +209,7 @@ func save(w http.ResponseWriter, r *http.Request) {
 	Allow := r.FormValue("Allow")
 	
     	  	
-    	file, err := os.OpenFile("./tmp.conf", os.O_TRUNC | os.O_WRONLY, 0600)
+    	file, err := os.OpenFile("./files/tmp.conf", os.O_TRUNC | os.O_WRONLY, 0600)
     	if err != nil {
         	fmt.Println("Unable to open file:", err) 
         	os.Exit(1) 
@@ -267,7 +267,7 @@ func save(w http.ResponseWriter, r *http.Request) {
     	}
     	
     	// перенести из tmp в основной файл
-    	cmd := exec.Command("cp", "./tmp.conf", "/etc/pzg-chrony.conf")
+    	cmd := exec.Command("cp", "./files/tmp.conf", "/etc/pzg-chrony.conf")
 	out, err := cmd.Output()
 	if err != nil {
 		fmt.Println("could not back copy: ", err)
@@ -374,7 +374,7 @@ func saveconfig(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(textarea)
 		
     	  	
-    	file, err := os.OpenFile("./tmp.conf", os.O_TRUNC | os.O_WRONLY, 0600)
+    	file, err := os.OpenFile("./files/tmp.conf", os.O_TRUNC | os.O_WRONLY, 0600)
     	if err != nil {
         	fmt.Println("Unable to open file:", err) 
         	os.Exit(1) 
@@ -391,7 +391,7 @@ func saveconfig(w http.ResponseWriter, r *http.Request) {
     	
     	
     	// перенести из tmp в основной файл
-    	cmd := exec.Command("cp", "./tmp.conf", "/etc/pzg-chrony.conf")
+    	cmd := exec.Command("cp", "./files/tmp.conf", "/etc/pzg-chrony.conf")
 	out, err := cmd.Output()
 	if err != nil {
 		fmt.Println("could not back copy: ", err)
@@ -404,6 +404,28 @@ func saveconfig(w http.ResponseWriter, r *http.Request) {
     	
     	fmt.Fprintf(w, File)
     	messages <- string("Config-файл Chrony сохранен<br/>Chrony запущен")
+}
+
+
+// Восстановление config-файла
+func restore(w http.ResponseWriter, r *http.Request) {
+	
+	fmt.Println("restore config") 	
+    	
+    	// перенести из files в основной файл
+    	cmd := exec.Command("cp", "./files/pzg-chrony.conf", "/etc/pzg-chrony.conf")
+	out, err := cmd.Output()
+	if err != nil {
+		fmt.Println("could not back copy: ", err)
+	}
+	fmt.Println(string(out))
+    	fmt.Println("Restored OK")
+    	restart(w, r)
+    	
+    	_ , File := scan()
+    	
+    	fmt.Fprintf(w, File)
+    	messages <- string("Config-файл Chrony восстановлен<br/>Chrony запущен")
 }
 
 

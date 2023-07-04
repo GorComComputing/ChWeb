@@ -1,6 +1,6 @@
 .PHONY: main
 main: *.go deps
-	GOOS=linux GOARCH=arm go build -o main .
+	GOOS=linux GOARCH=arm go build -o ChWeb .
 
 
 .PHONY:deps
