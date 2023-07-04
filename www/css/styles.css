@@ -22,6 +22,27 @@
 
 
 
+.demo {
+      border: 1px dashed #AFAFAF;
+      width: 500px;
+}
+
+#terminal {
+      font-family: fantasy;
+      line-height: 32px;
+      padding: 5px;
+}
+
+#usage {
+      font-family: Consolas, Menlo, Monaco, monospace;
+      background-color: #2A242D;
+      color: #FDFBFB;
+      font-size: 12px;
+}
+
+
+
+
 
 
 

@@ -1,118 +1,18 @@
 <!doctype html>
-<html>
+<html lang="ru">
 <head>
     	<meta charset="utf-8">
     	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Terminal</title>
+        <title>NTP Terminal</title>
         <link rel="stylesheet" href="xterm.css" />
         <link rel="stylesheet" href="style.css" />
-        <script src="xterm.js" ></script>
-        <script src="attach.js" ></script>
-        <script src="fit.js" ></script>
         
-        <link href="/css/bootstrap.min.css" rel="stylesheet">
-	<link href="/css/styles.css" rel="stylesheet">
-	
-	
-<style>
-    .demo {
-      border: 1px dashed #AFAFAF;
-      width: 500px;
-    }
-
-    #terminal {
-      font-family: fantasy;
-      line-height: 32px;
-      padding: 5px;
-    }
-
-    #usage {
-      font-family: Consolas, Menlo, Monaco, monospace;
-      background-color: #2A242D;
-      color: #FDFBFB;
-      font-size: 12px;
-    }
-</style>
-
-
-<script language=javascript>
-// установка longpoll
-function longpoll(url, callback) {
-
-    var req = new XMLHttpRequest (); 
-    req.open ('POST', url, true); 
-
-    req.onreadystatechange = function (aEvt) {
-        if (req.readyState == 4) { 
-            if (req.status == 200) {
-                callback(req.responseText);
-                longpoll(url, callback);
-            } else {
-                //alert ("long-poll connection lost");
-                var box = document.getElementById("counter");
-    		box.innerHTML = "Связь с сервером потеряна";
-    	
-    		var toastLiveExample = document.getElementById("liveToast")
-    		var toast = new bootstrap.Toast(toastLiveExample)
-    		toast.show()
-            }
-        }
-    };
-
-    req.send(null);
-}
-
-
-// действие на странице при получении сообщения с сервера
-function recv(msg) {
-    	var box = document.getElementById("counter");
-    	box.innerHTML = msg + "\n";
-    	
-    	var toastLiveExample = document.getElementById("liveToast")
-    	var toast = new bootstrap.Toast(toastLiveExample)
-    	toast.show()
-}
-
-// установка longpoll
-function longpoll2(url, callback) {
-
-    var req = new XMLHttpRequest (); 
-    req.open ('POST', url, true); 
-
-    req.onreadystatechange = function (aEvt) {
-        if (req.readyState == 4) { 
-            if (req.status == 200) {
-                callback(req.responseText);
-                longpoll2(url, callback);
-            } else {
-                //alert ("long-poll connection lost");
-                var box = document.getElementById("counter");
-    		box.innerHTML = "Связь с сервером потеряна";
-    	
-    		var toastLiveExample = document.getElementById("liveToast")
-    		var toast = new bootstrap.Toast(toastLiveExample)
-    		toast.show()
-            }
-        }
-    };
-
-    req.send(null);
-}
-
-// действие на странице при получении сообщения с сервера
-function recv2(msg) {
-    	var box = document.getElementById("mesg");
-    	box.innerHTML = msg + "\n";
-    	var box2 = document.getElementById("mesg2");
-    	box2.innerHTML = msg + "\n";
-}
-</script>
-	
-	
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/styles.css">
 </head>
 <body onload="longpoll('/poll', recv); longpoll2('/is_act', recv2);">
            
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
 	<!--img src="/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt=""-->
@@ -461,24 +361,14 @@ local stratum
     <div class="col">
 
 
- 
 
- 
- 
- 
- 
-<!--div id="usage" class="tm-container"><div><span>{{.File}}</span></div></div-->
- 
  
 <textarea id="usage" rows="25" cols="80" style="border:1px solid gray; background-color: #2A242D; color: #FDFBFB;" onkeyup='ViewText();'>
 {{.File}}
 </textarea>
  
  
- 
- 
- 
- 
+
       </div>
   </div> 
   
@@ -605,255 +495,20 @@ local stratum
 
 
 
+<script src="xterm.js"></script>
+<script src="attach.js"></script>
+<script src="fit.js"></script>
 
-
-
+<script src="/scripts/longpoll.js"></script>
 
 <script src="/scripts/bootstrap.bundle.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>  
 
-<script>
-		$(document).ready(function(){
-		
-			$('#formSave').submit(function(){
-				$.ajax({
-					type: "POST",
-					url: "/save",
-					data: "Leapsectz="+$("#Leapsectz").val() +"&"+
-					"Driftfile="+$("#Driftfile").val() +"&"+
-					"Makestep="+$("#Makestep").val() +"&"+
-					"Makestep2="+$("#Makestep2").val() +"&"+
-					"Rtcsync="+$("#Rtcsync").val() +"&"+
-					"Logdir="+$("#Logdir").val() +"&"+
-					"LocalStratum="+$("#LocalStratum").val() +"&"+
-					"Server="+$("#Server").val() +"&"+
-					"Allow="+$("#Allow").val(),
-					success: function(html){
-						//$("#usage").html(html);
-    						$('textarea').val(html);
-				   	}
-				});
-				return false;
-			});
-			
-			$('#formStart').submit(function(){
-				$.ajax({
-					type: "POST",
-					url: "/start",
-					//success: function(html){
-						//$("#msg").html(html);
-				   	//}
-				});
-				return false;
-			});
-			
-			$('#formStop').submit(function(){
-				$.ajax({
-					type: "POST",
-					url: "/stop",
-					//success: function(html){
-						//$("#msg").html(html);
-				   	//}
-				});
-				return false;
-			});
-			
-			$('#formRestart').submit(function(){
-				$.ajax({
-					type: "POST",
-					url: "/restart",
-					//success: function(html){
-						//$("#msg").html(html);
-				   	//}
-				});
-				return false;
-			});
-			
-			$('#formActivity').submit(function(){
-				$.ajax({
-					type: "POST",
-					url: "/activity",
-					success: function(html){
-						//$("#usage").html(html);
-    						$('textarea').val(html);
-				   	}
-				});
-				return false;
-			});
-			
-			$('#formTracking').submit(function(){
-				$.ajax({
-					type: "POST",
-					url: "/tracking",
-					success: function(html){
-						//$("#usage").html(html);
-    						$('textarea').val(html);
-				   	}
-				});
-				return false;
-			});
-			
-			$('#formSources').submit(function(){
-				$.ajax({
-					type: "POST",
-					url: "/sources",
-					success: function(html){
-						//$("#usage").html(html);
-    						$('textarea').val(html);
-				   	}
-				});
-				return false;
-			});
-			
-			$('#formSourceStats').submit(function(){
-				$.ajax({
-					type: "POST",
-					url: "/sourcestats",
-					success: function(html){
-						//$("#usage").html(html);
-    						$('textarea').val(html);
-				   	}
-				});
-				return false;
-			});
-			
-			$('#formClients').submit(function(){
-				$.ajax({
-					type: "POST",
-					url: "/clients",
-					success: function(html){
-						//$("#usage").html(html);
-    						$('textarea').val(html);
-				   	}
-				});
-				return false;
-			});
-			
-			$('#formConfig').submit(function(){
-				$.ajax({
-					type: "POST",
-					url: "/config",
-					success: function(html){
-						//$("#usage").html(html);
-    						$('textarea').val(html);
-				   	}
-				});
-				return false;
-			});
-			
-			
-			
-			$('#formSaveConfig').submit(function(){
-				$.ajax({
-					type: "POST",
-					url: "/saveconfig",
-					data: "file="+$("#usage").val(),
-					/*success: function(html){
-						//$("#usage").html(html);
-    						$('textarea').val(html);
-				   	}*/
-				});
-				return false;
-			});
-			
-		});
-	</script>
+<script src="/scripts/buttons.js"></script>
 	
-	
+<script defer src="/scripts/terminal.js"></script>	
 
-
-	
-	
-	
-	
-	
-
-
-        
-<script defer>console.log('Test1.1'); 
-  var term,
-                    protocol,
-                    socketURL,
-                    socket,
-                    charWidth,
-                    charHeight,
-                    cols,
-                    rows,
-                    szTimer,
-                    sessionStats;
-
-                var terminalContainer = document.getElementById('terminal-container');
-                createTerminal();
-                
-                                console.log('Test3');
-
-                function createTerminal() {
-                  //while (terminalContainer.children.length) {
-                  //  terminalContainer.removeChild(terminalContainer.children[0]);
-                  //}
-                  console.log('Test4');
-                  
-                  term = new Terminal({
-                    cursorBlink: true,
-                    screenKeys: true,
-                    /* Initial terminal size to match the session originator's terminal */
-                    cols: 100,
-                    rows: 30,
-                  });
-                  protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
-                  sessionId = location.pathname.split("/").pop()
-                  socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + 
-                    '/shell/' + '?' + document.cookie;
-                    
-                    console.log('Test');
-                    console.log(socketURL);
-
-                  socket = new WebSocket(socketURL);
-
-                  term.open(terminalContainer);
-                  term.fit();
-
-                  socket.onopen  = runRealTerminal;
-                  socket.onclose = runRealTerminal;
-                  socket.onerror = runRealTerminal;
-
-                  var initialGeometry = term.proposeGeometry()
-                  cols = initialGeometry.cols;
-                  rows = initialGeometry.rows;
-
-                  charWidth = Math.ceil(term.element.offsetWidth / cols);
-                  charHeight = Math.ceil(term.element.offsetHeight / rows);
-
-                  //szTimer = window.setInterval(updateTerminalSize, 1000)
-                }
-                
-                
-                
-                function runRealTerminal() {
-                  term.attach(socket);
-                  term._initialized = true;
-                  setTerminalSize(cols, rows);
-                }
-
-                function setTerminalSize (cols, rows) {
-                  var width = (cols * charWidth).toString() + 'px',
-                      height = (rows * charHeight).toString() + 'px';
-
-                  terminalContainer.style.width = width;
-                  terminalContainer.style.height = height;
-                  term.resize(cols, rows);
-                }
-
-                // gets called once a second to re-size the terminal to match it to
-                // the session originator's
-                
-                
-        </script>     
-       
-<script>
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-</script>
+<script src="/scripts/messages.js"></script>
        
         
     </body>
