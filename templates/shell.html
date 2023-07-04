@@ -1,0 +1,860 @@
+<!doctype html>
+<html>
+<head>
+    	<meta charset="utf-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Terminal</title>
+        <link rel="stylesheet" href="xterm.css" />
+        <link rel="stylesheet" href="style.css" />
+        <script src="xterm.js" ></script>
+        <script src="attach.js" ></script>
+        <script src="fit.js" ></script>
+        
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/styles.css" rel="stylesheet">
+	
+	
+<style>
+    .demo {
+      border: 1px dashed #AFAFAF;
+      width: 500px;
+    }
+
+    #terminal {
+      font-family: fantasy;
+      line-height: 32px;
+      padding: 5px;
+    }
+
+    #usage {
+      font-family: Consolas, Menlo, Monaco, monospace;
+      background-color: #2A242D;
+      color: #FDFBFB;
+      font-size: 12px;
+    }
+</style>
+
+
+<script language=javascript>
+// установка longpoll
+function longpoll(url, callback) {
+
+    var req = new XMLHttpRequest (); 
+    req.open ('POST', url, true); 
+
+    req.onreadystatechange = function (aEvt) {
+        if (req.readyState == 4) { 
+            if (req.status == 200) {
+                callback(req.responseText);
+                longpoll(url, callback);
+            } else {
+                //alert ("long-poll connection lost");
+                var box = document.getElementById("counter");
+    		box.innerHTML = "Связь с сервером потеряна";
+    	
+    		var toastLiveExample = document.getElementById("liveToast")
+    		var toast = new bootstrap.Toast(toastLiveExample)
+    		toast.show()
+            }
+        }
+    };
+
+    req.send(null);
+}
+
+
+// действие на странице при получении сообщения с сервера
+function recv(msg) {
+    	var box = document.getElementById("counter");
+    	box.innerHTML = msg + "\n";
+    	
+    	var toastLiveExample = document.getElementById("liveToast")
+    	var toast = new bootstrap.Toast(toastLiveExample)
+    	toast.show()
+}
+
+// установка longpoll
+function longpoll2(url, callback) {
+
+    var req = new XMLHttpRequest (); 
+    req.open ('POST', url, true); 
+
+    req.onreadystatechange = function (aEvt) {
+        if (req.readyState == 4) { 
+            if (req.status == 200) {
+                callback(req.responseText);
+                longpoll2(url, callback);
+            } else {
+                //alert ("long-poll connection lost");
+                var box = document.getElementById("counter");
+    		box.innerHTML = "Связь с сервером потеряна";
+    	
+    		var toastLiveExample = document.getElementById("liveToast")
+    		var toast = new bootstrap.Toast(toastLiveExample)
+    		toast.show()
+            }
+        }
+    };
+
+    req.send(null);
+}
+
+// действие на странице при получении сообщения с сервера
+function recv2(msg) {
+    	var box = document.getElementById("mesg");
+    	box.innerHTML = msg + "\n";
+    	var box2 = document.getElementById("mesg2");
+    	box2.innerHTML = msg + "\n";
+}
+</script>
+	
+	
+</head>
+<body onload="longpoll('/poll', recv); longpoll2('/is_act', recv2);">
+           
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+	<!--img src="/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt=""-->
+	Устройства</a>
+  
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/events">События</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/devices">Устройства</a>
+        </li>
+		<li class="nav-item">
+          <a class="nav-link" href="/users">Пользователи</a>
+        </li>
+        <!--li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Выпадающий список
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Действие</a></li>
+            <li><a class="dropdown-item" href="#">Другое действие</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Отключенная</a>
+        </li-->
+      </ul>
+      
+        <!--input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск"-->
+		{{if .UserName }}
+		<span class="navbar-text">
+		{{ .UserName }}
+		</span>
+		<form class="d-flex table-page" action="/logout" method="POST">
+		<input type="hidden" name="backLink" value={{.BackLink}}>
+        <button class="btn btn-outline-primary" type="submit" >Выход</button>
+		</form>
+		{{else}}
+		<form class="d-flex">
+        <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#authModal">Вход</button>
+		</form>
+		{{end}}
+    </div>
+	
+  </div>
+</nav>
+
+
+
+
+<!-- Модальное окно АВТОРИЗАЦИИ-->
+<div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Авторизация</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+	  <form action="/login" method="POST">
+      <div class="modal-body">
+		<input type="hidden" name="backLink" value={{.BackLink}}>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Логин:</label>
+			<input type="text" class="form-control" name="login" id="login" value="" />
+          </div>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Пароль:</label>
+			<input type="text" class="form-control" name="password" id="password" value="" />
+          </div>
+		 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Войти</button>
+      </div>
+	  </form>
+    </div>
+  </div>
+</div>
+  
+
+<div class="d-flex">
+	<button class="btn btn-outline-primary btn-sm add" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop1" aria-controls="offcanvasTop">
+	<span id="mesg2">
+    {{if .IsStarted }}
+        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#198754' class='bi bi-circle-fill' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg>
+    {{else}}
+    	<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#dc3545' class='bi bi-circle-fill' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg>
+    {{end}}
+    </span>
+	Chrony</button>
+	<button class="btn btn-outline-primary btn-sm add" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop2" aria-controls="offcanvasTop">gpsd</button>
+	<button class="btn btn-outline-primary btn-sm add" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop3" aria-controls="offcanvasTop">Terminal</button>
+</div>
+
+<div class="offcanvas offcanvas-top" style="height: 70vh" tabindex="-1" id="offcanvasTop1" aria-labelledby="offcanvasTopLabel">
+  <div class="offcanvas-header">
+    <div class="d-flex"> 
+    <div id="mesg" style="margin-right: 10px; line-height: 2">
+    {{if .IsStarted }}
+        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#198754' class='bi bi-circle-fill' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg>
+    {{else}}
+    	<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#dc3545' class='bi bi-circle-fill' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg>
+    {{end}}
+    </div>
+    
+    <h5 id="offcanvasTopLabel" style="line-height: 2">Панель управления Chrony</h5>
+    <div class="d-flex">  
+	<form id="formStart">
+		<button type="submit" class="btn btn-outline-success btn-sm add">Start</button>
+	</form>
+
+	<form id="formStop">
+		<button type="submit" class="btn btn-outline-danger btn-sm add">Stop</button>
+	</form>
+    </div>
+    
+    <form id="formRestart">
+	<button type="submit" class="btn btn-outline-primary btn-sm add">Restart</button> 
+    </form>
+    
+    
+    
+    
+    
+
+
+
+    
+    
+    
+    </div>
+    
+<div class="d-flex">  
+
+
+<form id="formActivity">
+<button type="submit" class="btn btn-outline-primary btn-sm add">
+  Activity
+</button> 
+</form>
+
+<form id="formTracking">
+<button type="submit" class="btn btn-outline-primary btn-sm add">
+  Tracking
+</button> 
+</form>
+
+<form id="formSources">
+<button type="submit" class="btn btn-outline-primary btn-sm add">
+  Sources
+</button> 
+</form>
+
+<form id="formSourceStats">
+<button type="submit" class="btn btn-outline-primary btn-sm add">
+  SourceStats
+</button> 
+</form>
+
+<form id="formClients">
+<button type="submit" class="btn btn-outline-primary btn-sm add">
+  Clients
+</button> 
+</form>
+
+<form id="formConfig">
+<button type="submit" class="btn btn-outline-dark btn-sm add">
+  Config
+</button> 
+</form>
+
+<form id="formSaveConfig">
+<button type="submit" class="btn btn-outline-dark btn-sm add">
+  Save Config
+</button>
+</form>
+</div>  
+    
+    
+    
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+  
+  
+  <div class="row">
+    <div class="col">
+      
+    
+
+ 
+
+<form id="formSave"> 
+<table>
+<tr>
+<td>
+server
+</td>
+<td>
+<input type="text" id="Server" name="Server" class="form-control" aria-describedby="passwordHelpInline" value={{.Conf.Server}}>
+</td>
+<td>
+<div class="form-check" data-bs-toggle="tooltip" data-bs-placement="top"
+        data-bs-custom-class="custom-tooltip"
+        data-bs-title="С этой опцией интервал между первыми четырьмя запросами, отправленными на сервер, будет составлять 2 секунды или меньше вместо интервала, заданного опцией minpoll, что позволяет chronyd сделать первое обновление часов вскоре после запуска.">
+        <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck">
+        <label class="form-check-label" for="disabledFieldsetCheck">
+          iburst
+        </label>
+</div>
+</td>
+</tr>
+
+<tr>
+<td>
+allow
+</td>
+<td>
+<input type="text" id="Allow" name="Allow" class="form-control" aria-describedby="passwordHelpInline" value={{.Conf.Allow}}>
+</td>
+<td>
+<div class="form-check">
+        <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck">
+        <label class="form-check-label" for="disabledFieldsetCheck">
+          all
+        </label>
+</div>
+</td>
+</tr>
+
+<tr>
+<td>
+deny
+</td>
+<td>
+<input type="text" id="Deny" name="Deny" class="form-control" aria-describedby="passwordHelpInline" value="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Это похоже на директиву allow , за исключением того, что она запрещает доступ клиента NTP к определенной подсети или хосту, а не разрешает его.">
+</td>
+<td>
+<div class="form-check">
+        <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck">
+        <label class="form-check-label" for="disabledFieldsetCheck">
+          all
+        </label>
+</div>
+</td>
+</tr>
+
+<tr>
+<td>
+<div class="form-check" data-bs-toggle="tooltip" data-bs-placement="top"
+        data-bs-custom-class="custom-tooltip"
+        data-bs-title="Директива rtcsync включает режим, в котором системное время периодически копируется в RTC и chronyd не пытается отслеживать его дрейф. Эту директиву нельзя использовать с директивой rtcfile .">
+        <input class="form-check-input" type="checkbox" id="Rtcsync" name="Rtcsync">
+        <label class="form-check-label" for="disabledFieldsetCheck">
+          rtcsync
+        </label>
+</div>
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+
+<tr>
+<td>
+leapsectz
+</td>
+<td>
+<input type="text" id="Leapsectz" name="Leapsectz" class="form-control" aria-describedby="passwordHelpInline" value={{.Conf.Leapsectz}}>
+</td>
+</tr>
+
+<tr>
+<td>
+driftfile
+</td>
+<td>
+<input type="text" id="Driftfile" name="Driftfile" class="form-control" aria-describedby="passwordHelpInline" value={{.Conf.Driftfile}}>
+</td>
+</tr>
+
+<tr>
+<td>
+makestep
+</td>
+<td>
+<input type="text" id="Makestep" name="Makestep" class="form-control" aria-describedby="passwordHelpInline" value={{.Conf.Makestep}}>
+</td>
+<td>
+<input type="text" id="Makestep2" name="Makestep2" class="form-control" aria-describedby="passwordHelpInline" value={{.Conf.Makestep2}}>
+</td>
+</tr>
+
+<tr>
+<td>
+logdir
+</td>
+<td>
+<input type="text" id="Logdir" name="Logdir" class="form-control" aria-describedby="passwordHelpInline" value={{.Conf.Logdir}}>
+</td>
+</tr>
+
+<tr>
+<td>
+local stratum
+</td>
+<td>
+<input type="text" id="LocalStratum" name="Stratum" class="form-control" aria-describedby="passwordHelpInline" value={{.Conf.Local}}>
+</td>
+</tr>
+
+<tr>
+<td></td>
+<td>
+<button type="submit" class="btn btn-outline-primary btn-sm add">Save & Restart</button> 
+</td>
+</tr>
+</table>
+</form>  
+
+
+
+
+
+
+
+
+
+
+ 
+
+ 
+ </div>
+    <div class="col">
+
+
+ 
+
+ 
+ 
+ 
+ 
+<!--div id="usage" class="tm-container"><div><span>{{.File}}</span></div></div-->
+ 
+ 
+<textarea id="usage" rows="25" cols="80" style="border:1px solid gray; background-color: #2A242D; color: #FDFBFB;" onkeyup='ViewText();'>
+{{.File}}
+</textarea>
+ 
+ 
+ 
+ 
+ 
+ 
+      </div>
+  </div> 
+  
+  
+  
+   
+  </div>
+</div>
+
+<div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop2" aria-labelledby="offcanvasTopLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasTopLabel">Панель управления gpsd</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body d-flex">
+   
+<!-- Кнопка-триггер модального окна -->
+<form action="/start" method="POST">
+<input type="hidden" name="backLink" value={{.BackLink}}>
+<button type="submit" class="btn btn-outline-primary btn-sm add" data-bs-toggle="modal" data-bs-target="#insertModal">
+  Start
+</button> 
+</form>
+
+<form action="/stop" method="POST">
+<input type="hidden" name="backLink" value={{.BackLink}}>
+<button type="submit" class="btn btn-outline-primary btn-sm add" data-bs-toggle="modal" data-bs-target="#insertModal">
+  Stop
+</button> 
+</form>
+
+<form action="/restart" method="POST">
+<input type="hidden" name="backLink" value={{.BackLink}}>
+<button type="submit" class="btn btn-outline-primary btn-sm add" data-bs-toggle="modal" data-bs-target="#insertModal">
+  Restart
+</button> 
+</form>
+
+   
+   
+   
+  </div>
+</div>
+
+
+<div class="offcanvas offcanvas-top" style="height: 80vh" tabindex="-1" id="offcanvasTop3" aria-labelledby="offcanvasTopLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasTopLabel">Terminal</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body d-flex">
+  
+  
+  
+
+
+   
+  </div>
+  
+</div>
+
+
+
+
+
+
+<!-- Модальное окно ДОБАВИТЬ-->
+<div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Добавить устройство</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+	  <form action="/insert_device" method="POST">
+      <div class="modal-body">
+        <input type="hidden" name="backLink" value={{.BackLink}}>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Название устройства:</label>
+            <!--input type="text" class="form-control" id="recipient-name"-->
+			<input type="text" class="form-control" name="name" id="name" value="" />
+          </div>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">IP адрес:</label>
+			<input type="text" class="form-control" name="ipaddr" id="ipaddr" value="" />
+            <!--textarea class="form-control" id="message-text"></textarea-->
+          </div>
+		 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Добавить</button>
+      </div>
+	  </form>
+    </div>
+  </div>
+</div>
+
+
+
+  
+
+<p id="app" class="bg-warning table-page">{{ .Message }}</p>
+
+
+<div id="terminal-container"></div>
+
+
+
+
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+    <!--div class="toast-header">
+      <img src="..." class="rounded me-2" alt="...">
+      <strong class="me-auto">Bootstrap</strong>
+      <small>11 мин назад</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+    </div-->
+    <div class="toast-body">
+      <span id="counter"></span> 
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<script src="/scripts/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>  
+
+<script>
+		$(document).ready(function(){
+		
+			$('#formSave').submit(function(){
+				$.ajax({
+					type: "POST",
+					url: "/save",
+					data: "Leapsectz="+$("#Leapsectz").val() +"&"+
+					"Driftfile="+$("#Driftfile").val() +"&"+
+					"Makestep="+$("#Makestep").val() +"&"+
+					"Makestep2="+$("#Makestep2").val() +"&"+
+					"Rtcsync="+$("#Rtcsync").val() +"&"+
+					"Logdir="+$("#Logdir").val() +"&"+
+					"LocalStratum="+$("#LocalStratum").val() +"&"+
+					"Server="+$("#Server").val() +"&"+
+					"Allow="+$("#Allow").val(),
+					success: function(html){
+						//$("#usage").html(html);
+    						$('textarea').val(html);
+				   	}
+				});
+				return false;
+			});
+			
+			$('#formStart').submit(function(){
+				$.ajax({
+					type: "POST",
+					url: "/start",
+					//success: function(html){
+						//$("#msg").html(html);
+				   	//}
+				});
+				return false;
+			});
+			
+			$('#formStop').submit(function(){
+				$.ajax({
+					type: "POST",
+					url: "/stop",
+					//success: function(html){
+						//$("#msg").html(html);
+				   	//}
+				});
+				return false;
+			});
+			
+			$('#formRestart').submit(function(){
+				$.ajax({
+					type: "POST",
+					url: "/restart",
+					//success: function(html){
+						//$("#msg").html(html);
+				   	//}
+				});
+				return false;
+			});
+			
+			$('#formActivity').submit(function(){
+				$.ajax({
+					type: "POST",
+					url: "/activity",
+					success: function(html){
+						//$("#usage").html(html);
+    						$('textarea').val(html);
+				   	}
+				});
+				return false;
+			});
+			
+			$('#formTracking').submit(function(){
+				$.ajax({
+					type: "POST",
+					url: "/tracking",
+					success: function(html){
+						//$("#usage").html(html);
+    						$('textarea').val(html);
+				   	}
+				});
+				return false;
+			});
+			
+			$('#formSources').submit(function(){
+				$.ajax({
+					type: "POST",
+					url: "/sources",
+					success: function(html){
+						//$("#usage").html(html);
+    						$('textarea').val(html);
+				   	}
+				});
+				return false;
+			});
+			
+			$('#formSourceStats').submit(function(){
+				$.ajax({
+					type: "POST",
+					url: "/sourcestats",
+					success: function(html){
+						//$("#usage").html(html);
+    						$('textarea').val(html);
+				   	}
+				});
+				return false;
+			});
+			
+			$('#formClients').submit(function(){
+				$.ajax({
+					type: "POST",
+					url: "/clients",
+					success: function(html){
+						//$("#usage").html(html);
+    						$('textarea').val(html);
+				   	}
+				});
+				return false;
+			});
+			
+			$('#formConfig').submit(function(){
+				$.ajax({
+					type: "POST",
+					url: "/config",
+					success: function(html){
+						//$("#usage").html(html);
+    						$('textarea').val(html);
+				   	}
+				});
+				return false;
+			});
+			
+			
+			
+			$('#formSaveConfig').submit(function(){
+				$.ajax({
+					type: "POST",
+					url: "/saveconfig",
+					data: "file="+$("#usage").val(),
+					/*success: function(html){
+						//$("#usage").html(html);
+    						$('textarea').val(html);
+				   	}*/
+				});
+				return false;
+			});
+			
+		});
+	</script>
+	
+	
+
+
+	
+	
+	
+	
+	
+
+
+        
+<script defer>console.log('Test1.1'); 
+  var term,
+                    protocol,
+                    socketURL,
+                    socket,
+                    charWidth,
+                    charHeight,
+                    cols,
+                    rows,
+                    szTimer,
+                    sessionStats;
+
+                var terminalContainer = document.getElementById('terminal-container');
+                createTerminal();
+                
+                                console.log('Test3');
+
+                function createTerminal() {
+                  //while (terminalContainer.children.length) {
+                  //  terminalContainer.removeChild(terminalContainer.children[0]);
+                  //}
+                  console.log('Test4');
+                  
+                  term = new Terminal({
+                    cursorBlink: true,
+                    screenKeys: true,
+                    /* Initial terminal size to match the session originator's terminal */
+                    cols: 100,
+                    rows: 30,
+                  });
+                  protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
+                  sessionId = location.pathname.split("/").pop()
+                  socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + 
+                    '/shell/' + '?' + document.cookie;
+                    
+                    console.log('Test');
+                    console.log(socketURL);
+
+                  socket = new WebSocket(socketURL);
+
+                  term.open(terminalContainer);
+                  term.fit();
+
+                  socket.onopen  = runRealTerminal;
+                  socket.onclose = runRealTerminal;
+                  socket.onerror = runRealTerminal;
+
+                  var initialGeometry = term.proposeGeometry()
+                  cols = initialGeometry.cols;
+                  rows = initialGeometry.rows;
+
+                  charWidth = Math.ceil(term.element.offsetWidth / cols);
+                  charHeight = Math.ceil(term.element.offsetHeight / rows);
+
+                  //szTimer = window.setInterval(updateTerminalSize, 1000)
+                }
+                
+                
+                
+                function runRealTerminal() {
+                  term.attach(socket);
+                  term._initialized = true;
+                  setTerminalSize(cols, rows);
+                }
+
+                function setTerminalSize (cols, rows) {
+                  var width = (cols * charWidth).toString() + 'px',
+                      height = (rows * charHeight).toString() + 'px';
+
+                  terminalContainer.style.width = width;
+                  terminalContainer.style.height = height;
+                  term.resize(cols, rows);
+                }
+
+                // gets called once a second to re-size the terminal to match it to
+                // the session originator's
+                
+                
+        </script>     
+       
+<script>
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
+       
+        
+    </body>
+</html>
