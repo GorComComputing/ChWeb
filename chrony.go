@@ -2,12 +2,10 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
 	
     	"os/exec"
     	"os"
- 	"io"
     	"bufio"
     	"log"
     	"strings"
@@ -25,7 +23,7 @@ type Config struct {
 	Server		string
 	Allow 		string
 }
-
+/*
 // Page fields
 type ShellPage struct {
 	Message  	string
@@ -76,18 +74,17 @@ func shell(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	tmpl.Execute(w, bks)
 }
-
+*/
 
 // Запуск Chrony
 func start(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("start")
-
-	cmd := exec.Command("/etc/init.d/chrony", "start")
+	//cmd := exec.Command("/etc/init.d/chrony", "start")
+	cmd := exec.Command("./ChShell", "start")
 	out, err := cmd.Output()
 	if err != nil {
 		fmt.Println("could not run command: ", err)
 	}
-	fmt.Println(string(out))
+	if len(out) > 0 {fmt.Println(string(out))}
 
 	//fmt.Fprintf(w, "<p class='bg-success table-page'>Chrony запущен</p>")
 	messages <- string("Chrony запущен")

@@ -37,8 +37,8 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	if strings.Trim(r.URL.Path, "/") == "sh" {
-		shell(w, r)
+	if strings.Trim(r.URL.Path, "/") == "" {
+		chrony_page(w, r)
 		isStartChrony()
 		return
 	}
