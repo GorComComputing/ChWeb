@@ -42,7 +42,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		isStartChrony()
 		return
 	}
-	// Запуск Chrony
+/*	// Запуск Chrony
 	if strings.Trim(r.URL.Path, "/") == "start" {
 		start(w, r)
 		return
@@ -87,7 +87,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		clients(w, r)
 		return
 	}
-	
+*/	
 	if strings.Trim(r.URL.Path, "/") == "poll" {
 		PollResponse(w, r)
 		return
@@ -98,7 +98,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	if strings.Trim(r.URL.Path, "/") == "config" {
+/*	if strings.Trim(r.URL.Path, "/") == "config" {
 		config(w, r)
 		return
 	}
@@ -113,7 +113,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	
+*/	
 	// serve static assets from 'static' dir:
 	h.fileServer.ServeHTTP(w, r)
 }

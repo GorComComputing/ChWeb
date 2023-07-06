@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/css/styles.css">
 </head>
-<body onload="longpoll('/poll', recv); longpoll2('/is_act', recv2);">
+<body onload="set_longpoll();">
            
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
@@ -129,81 +129,21 @@
     
     <h5 id="offcanvasTopLabel" style="line-height: 2">Панель управления Chrony</h5>
     <div class="d-flex">  
-	<form id="formStart">
-		<button type="submit" class="btn btn-outline-success btn-sm add">Start</button>
-	</form>
-
-	<form id="formStop">
-		<button type="submit" class="btn btn-outline-danger btn-sm add">Stop</button>
-	</form>
+	<button id="btnStart" class="btn btn-outline-success btn-sm add">Start</button>
+	<button id="btnStop" class="btn btn-outline-danger btn-sm add">Stop</button>
     </div>
-    
-    <form id="formRestart">
-	<button type="submit" class="btn btn-outline-primary btn-sm add">Restart</button> 
-    </form>
-    
-    
-    
-    
-    
-
-
-
-    
-    
-    
+	<button id="btnRestart" class="btn btn-outline-primary btn-sm add">Restart</button> 
     </div>
     
 <div class="d-flex">  
-
-
-<form id="formActivity">
-<button type="submit" class="btn btn-outline-primary btn-sm add">
-  Activity
-</button> 
-</form>
-
-<form id="formTracking">
-<button type="submit" class="btn btn-outline-primary btn-sm add">
-  Tracking
-</button> 
-</form>
-
-<form id="formSources">
-<button type="submit" class="btn btn-outline-primary btn-sm add">
-  Sources
-</button> 
-</form>
-
-<form id="formSourceStats">
-<button type="submit" class="btn btn-outline-primary btn-sm add">
-  SourceStats
-</button> 
-</form>
-
-<form id="formClients">
-<button type="submit" class="btn btn-outline-primary btn-sm add">
-  Clients
-</button> 
-</form>
-
-<form id="formConfig">
-<button type="submit" class="btn btn-outline-dark btn-sm add">
-  Config
-</button> 
-</form>
-
-<form id="formSaveConfig">
-<button type="submit" class="btn btn-outline-dark btn-sm add">
-  Save Config
-</button>
-</form>
-
-<form id="formRestore">
-<button type="submit" class="btn btn-outline-dark btn-sm add">
-  Restore
-</button>
-</form>
+<button id="btnActivity" class="btn btn-outline-primary btn-sm add">Activity</button> 
+<button id="btnTracking" class="btn btn-outline-primary btn-sm add">Tracking</button> 
+<button id="btnSources" class="btn btn-outline-primary btn-sm add">Sources</button> 
+<button id="btnSourceStats" class="btn btn-outline-primary btn-sm add">SourceStats</button> 
+<button id="btnClients" class="btn btn-outline-primary btn-sm add">Clients</button> 
+<button id="btnConfig" class="btn btn-outline-dark btn-sm add">Config</button> 
+<button id="btnSaveConfig" class="btn btn-outline-dark btn-sm add">Save Config</button>
+<button id="btnRestore" class="btn btn-outline-dark btn-sm add">Restore</button>
 </div>  
     
     

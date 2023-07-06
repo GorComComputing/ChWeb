@@ -1,3 +1,10 @@
+// установка всех longpoll
+function set_longpoll() {
+	longpoll('/poll', recv);
+	longpoll2('/is_act', recv2);
+}
+
+
 // установка longpoll
 function longpoll(url, callback) {
 

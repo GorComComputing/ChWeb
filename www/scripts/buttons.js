@@ -1,18 +1,21 @@
 		$(document).ready(function(){
+			var Protocol = window.location.protocol;
+			var Host = window.location.hostname;
 		
 			$('#formSave').submit(function(){
 				$.ajax({
 					type: "POST",
-					url: "/save",
-					data: "Leapsectz="+$("#Leapsectz").val() +"&"+
-					"Driftfile="+$("#Driftfile").val() +"&"+
-					"Makestep="+$("#Makestep").val() +"&"+
-					"Makestep2="+$("#Makestep2").val() +"&"+
-					"Rtcsync="+$("#Rtcsync").val() +"&"+
-					"Logdir="+$("#Logdir").val() +"&"+
-					"LocalStratum="+$("#LocalStratum").val() +"&"+
-					"Server="+$("#Server").val() +"&"+
-					"Allow="+$("#Allow").val(),
+					//url: "/save",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=write&leapsectz="+$("#Leapsectz").val() +"&"+
+					//"driftfile="+$("#Driftfile").val() +"&"+
+					"makestep="+$("#Makestep").val() +"&"+
+					"makestep2="+$("#Makestep2").val() +"&"+
+					"rtcsync="+$("#Rtcsync").val() +"&"+
+					//"logdir="+$("#Logdir").val() +"&"+
+					"localStratum="+$("#LocalStratum").val() +"&"+
+					"server="+$("#Server").val() +"&"+
+					"allow="+$("#Allow").val(),
 					success: function(html){
 						//$("#usage").html(html);
     						$('textarea').val(html);
@@ -21,10 +24,14 @@
 				return false;
 			});
 			
-			$('#formStart').submit(function(){
+			
+			$('#btnStart').on('click',  function(){
+				//const Protocol = window.location.protocol;
+				//const Host = window.location.hostname;
 				$.ajax({
 					type: "POST",
-					url: "/start",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=start",
 					//success: function(html){
 						//$("#msg").html(html);
 				   	//}
@@ -32,10 +39,13 @@
 				return false;
 			});
 			
-			$('#formStop').submit(function(){
+			$('#btnStop').on('click',  function(){
+				//const Protocol = window.location.protocol;
+				//const Host = window.location.hostname;
 				$.ajax({
 					type: "POST",
-					url: "/stop",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=stop",
 					//success: function(html){
 						//$("#msg").html(html);
 				   	//}
@@ -43,10 +53,13 @@
 				return false;
 			});
 			
-			$('#formRestart').submit(function(){
+			$('#btnRestart').on('click',  function(){
+				//const Protocol = window.location.protocol;
+				//const Host = window.location.hostname;
 				$.ajax({
 					type: "POST",
-					url: "/restart",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=restart",
 					//success: function(html){
 						//$("#msg").html(html);
 				   	//}
@@ -54,10 +67,13 @@
 				return false;
 			});
 			
-			$('#formActivity').submit(function(){
+			$('#btnActivity').on('click',  function(){
+				//const Protocol = window.location.protocol;
+				//const Host = window.location.hostname;
 				$.ajax({
 					type: "POST",
-					url: "/activity",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=activity",
 					success: function(html){
 						//$("#usage").html(html);
     						$('textarea').val(html);
@@ -66,10 +82,13 @@
 				return false;
 			});
 			
-			$('#formTracking').submit(function(){
+			$('#btnTracking').on('click',  function(){
+			//$('#formTracking').submit(function(){
 				$.ajax({
 					type: "POST",
-					url: "/tracking",
+					//url: "/tracking",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=tracking",
 					success: function(html){
 						//$("#usage").html(html);
     						$('textarea').val(html);
@@ -78,10 +97,13 @@
 				return false;
 			});
 			
-			$('#formSources').submit(function(){
+			$('#btnSources').on('click',  function(){
+			//$('#formSources').submit(function(){
 				$.ajax({
 					type: "POST",
-					url: "/sources",
+					//url: "/sources",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=sources",
 					success: function(html){
 						//$("#usage").html(html);
     						$('textarea').val(html);
@@ -90,10 +112,13 @@
 				return false;
 			});
 			
-			$('#formSourceStats').submit(function(){
+			$('#btnSourceStats').on('click',  function(){
+			//$('#formSourceStats').submit(function(){
 				$.ajax({
 					type: "POST",
-					url: "/sourcestats",
+					//url: "/sourcestats",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=sourcestats",
 					success: function(html){
 						//$("#usage").html(html);
     						$('textarea').val(html);
@@ -102,10 +127,13 @@
 				return false;
 			});
 			
-			$('#formClients').submit(function(){
+			$('#btnClients').on('click',  function(){
+			//$('#formClients').submit(function(){
 				$.ajax({
 					type: "POST",
-					url: "/clients",
+					//url: "/clients",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=clients",
 					success: function(html){
 						//$("#usage").html(html);
     						$('textarea').val(html);
@@ -114,10 +142,13 @@
 				return false;
 			});
 			
-			$('#formConfig').submit(function(){
+			$('#btnConfig').on('click',  function(){
+			//$('#formConfig').submit(function(){
 				$.ajax({
 					type: "POST",
-					url: "/config",
+					//url: "/config",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=config",
 					success: function(html){
 						//$("#usage").html(html);
     						$('textarea').val(html);
@@ -127,12 +158,14 @@
 			});
 			
 			
-			
-			$('#formSaveConfig').submit(function(){
+			$('#btnSaveConfig').on('click',  function(){
+			//$('#formSaveConfig').submit(function(){
 				$.ajax({
 					type: "POST",
-					url: "/saveconfig",
-					data: "file="+$("#usage").val(),
+					//url: "/saveconfig",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=save",
+					data: "text="+$("#usage").val(),
 					/*success: function(html){
 						//$("#usage").html(html);
     						$('textarea').val(html);
@@ -141,10 +174,13 @@
 				return false;
 			});
 			
-			$('#formRestore').submit(function(){
+			$('#btnRestore').on('click',  function(){
+			//$('#formRestore').submit(function(){
 				$.ajax({
 					type: "POST",
-					url: "/restore",
+					//url: "/restore",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=restore",
 					success: function(html){
     						$('textarea').val(html);
 				   	}

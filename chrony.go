@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"net/http"
+	//"net/http"
 	
-    	"os/exec"
+    	//"os/exec"
     	"os"
     	"bufio"
     	"log"
@@ -23,59 +23,8 @@ type Config struct {
 	Server		string
 	Allow 		string
 }
+
 /*
-// Page fields
-type ShellPage struct {
-	Message  	string
-	UserName 	string
-	BackLink 	string
-	Conf	 	Config
-	IsStarted	bool
-	File		string //template.HTML 
-}
-
-var bks ShellPage
-
-
-// создание каналов для long poll
-var messages chan string = make(chan string, 100)
-var messages2 chan string = make(chan string, 100)
-
-
-// получение longpoll и установка канала для ответа
-func PollResponse(w http.ResponseWriter, req *http.Request) {
-    	io.WriteString(w, <-messages)
-}
-
-
-// получение longpoll и установка канала для ответа
-func PollResponse2(w http.ResponseWriter, req *http.Request) {
-    	io.WriteString(w, <-messages2)
-}
-
-
-// Shell handler
-func shell(w http.ResponseWriter, r *http.Request) {
-	
-	// Set page fields
-	bks.Message = "Message"
-	bks.UserName = "User"//check_cookies(w, r)
-	bks.BackLink = "sh"
-	
-	bks.Conf, bks.File = scan()
-	//File = strings.Replace(File, "\n", "<br/>", -1)
-	//bks.File = template.HTML(File)
-	//fmt.Println(bks.File )
-	
-	bks.IsStarted = isStartChrony()
-
-	// Response template
-	tmpl, _ := template.ParseFiles("templates/shell.html")
-	w.Header().Set("Content-Type", "text/html")
-	tmpl.Execute(w, bks)
-}
-*/
-
 // Запуск Chrony
 func start(w http.ResponseWriter, r *http.Request) {
 	//cmd := exec.Command("/etc/init.d/chrony", "start")
@@ -122,7 +71,7 @@ func restart(w http.ResponseWriter, r *http.Request) {
 	isStartChrony()
 }
 
-
+*/
 // Проверяет запущен ли Chrony
 func isStartChrony() bool {
 	file, err := os.Open("/var/run/chrony/chronyd.pid")
@@ -190,7 +139,7 @@ func scan() (Config, string) {
 	return config, string(dat)
 }
 
-
+/*
 // Сохраняет config-файл и перезапускает Chrony
 func save(w http.ResponseWriter, r *http.Request) {
 	// parameters from POST
@@ -425,5 +374,5 @@ func restore(w http.ResponseWriter, r *http.Request) {
     	messages <- string("Config-файл Chrony восстановлен<br/>Chrony запущен")
 }
 
-
+*/
 
