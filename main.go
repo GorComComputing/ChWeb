@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"log"
 	"strings"
+	"encoding/gob"
 )
 
 
@@ -14,6 +15,8 @@ type Handler struct {
 
 
 func main() {
+	gob.Register(sesKey(0))
+
 	// Resource files routs (js, css)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./css"))))
 	http.Handle("/scripts/", http.StripPrefix("/scripts/", http.FileServer(http.Dir("./scripts"))))
@@ -42,52 +45,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		isStartChrony()
 		return
 	}
-/*	// Запуск Chrony
-	if strings.Trim(r.URL.Path, "/") == "start" {
-		start(w, r)
-		return
-	}
-	// Остановка Chrony
-	if strings.Trim(r.URL.Path, "/") == "stop" {
-		stop(w, r)
-		return
-	}
-	// Перезапуск Chrony
-	if strings.Trim(r.URL.Path, "/") == "restart" {
-		restart(w, r)
-		return
-	}
 	
-	if strings.Trim(r.URL.Path, "/") == "save" {
-		save(w, r)
-		return
-	}
-	
-	if strings.Trim(r.URL.Path, "/") == "activity" {
-		activity(w, r)
-		return
-	}
-	
-	if strings.Trim(r.URL.Path, "/") == "tracking" {
-		tracking(w, r)
-		return
-	}
-	
-	if strings.Trim(r.URL.Path, "/") == "sources" {
-		sources(w, r)
-		return
-	}
-	
-	if strings.Trim(r.URL.Path, "/") == "sourcestats" {
-		sourcestats(w, r)
-		return
-	}
-	
-	if strings.Trim(r.URL.Path, "/") == "clients" {
-		clients(w, r)
-		return
-	}
-*/	
 	if strings.Trim(r.URL.Path, "/") == "poll" {
 		PollResponse(w, r)
 		return
@@ -98,22 +56,18 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-/*	if strings.Trim(r.URL.Path, "/") == "config" {
-		config(w, r)
+	if strings.Trim(r.URL.Path, "/") == "login" {
+		login(w, r)
 		return
 	}
 	
-	if strings.Trim(r.URL.Path, "/") == "saveconfig" {
-		saveconfig(w, r)
+	if strings.Trim(r.URL.Path, "/") == "logout" {
+		logout(w, r)
 		return
 	}
 	
-	if strings.Trim(r.URL.Path, "/") == "restore" {
-		restore(w, r)
-		return
-	}
 	
-*/	
+		
 	// serve static assets from 'static' dir:
 	h.fileServer.ServeHTTP(w, r)
 }

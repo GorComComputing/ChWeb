@@ -42,8 +42,8 @@ func chrony_page(w http.ResponseWriter, r *http.Request) {
 	
 	// Set page fields
 	bks.Message = "Message"
-	bks.UserName = "User"//check_cookies(w, r)
-	bks.BackLink = "sh"
+	bks.UserName = check_cookies(w, r)
+	bks.BackLink = "/"
 	
 	bks.Conf, bks.File = scan()
 	//File = strings.Replace(File, "\n", "<br/>", -1)
@@ -53,7 +53,7 @@ func chrony_page(w http.ResponseWriter, r *http.Request) {
 	bks.IsStarted = isStartChrony()
 
 	// Response template
-	tmpl, _ := template.ParseFiles("templates/shell.html")
+	tmpl, _ := template.ParseFiles("www/shell.html")
 	w.Header().Set("Content-Type", "text/html")
 	tmpl.Execute(w, bks)
 }

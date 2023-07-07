@@ -16,7 +16,11 @@
 }
 
 .table-page {
-	margin-left: 10px;
+	/*margin-left: 10px;*/
+}
+
+.username {
+	padding-right: 0.5rem;
 }
 
 
@@ -33,11 +37,13 @@
       padding: 5px;
 }
 
-#usage {
+.usage {
       font-family: Consolas, Menlo, Monaco, monospace;
       background-color: #2A242D;
       color: #FDFBFB;
       font-size: 12px;
+      
+      border:1px solid gray;
 }
 
 

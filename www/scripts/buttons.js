@@ -1,6 +1,44 @@
 		$(document).ready(function(){
 			var Protocol = window.location.protocol;
 			var Host = window.location.hostname;
+			
+			
+			$('#formRunCmd').submit(function(){
+				$.ajax({
+					type: "POST",
+					//url: "/save",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=run "+$("#exec").val(),
+					success: function(html){
+						$("#spar").val(html);
+				   	}
+				});
+				return false;
+			});
+			
+			$('#formKill').submit(function(){
+				$.ajax({
+					type: "POST",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=kill "+$("#kpid").val(),
+					success: function(html){
+						$("#spar").val(html);
+				   	}
+				});
+				return false;
+			});
+			
+			$('#formKillAll').submit(function(){
+				$.ajax({
+					type: "POST",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=killall "+$("#kname").val(),
+					success: function(html){
+						$("#spar").val(html);
+				   	}
+				});
+				return false;
+			});
 		
 			$('#formSave').submit(function(){
 				$.ajax({
@@ -18,7 +56,7 @@
 					"allow="+$("#Allow").val(),
 					success: function(html){
 						//$("#usage").html(html);
-    						$('textarea').val(html);
+    						$('#usage').val(html);
 				   	}
 				});
 				return false;
@@ -76,7 +114,7 @@
 					data: "cmd=activity",
 					success: function(html){
 						//$("#usage").html(html);
-    						$('textarea').val(html);
+    						$('#usage').val(html);
 				   	}
 				});
 				return false;
@@ -91,7 +129,7 @@
 					data: "cmd=tracking",
 					success: function(html){
 						//$("#usage").html(html);
-    						$('textarea').val(html);
+    						$('#usage').val(html);
 				   	}
 				});
 				return false;
@@ -106,7 +144,7 @@
 					data: "cmd=sources",
 					success: function(html){
 						//$("#usage").html(html);
-    						$('textarea').val(html);
+    						$('#usage').val(html);
 				   	}
 				});
 				return false;
@@ -121,7 +159,7 @@
 					data: "cmd=sourcestats",
 					success: function(html){
 						//$("#usage").html(html);
-    						$('textarea').val(html);
+    						$('#usage').val(html);
 				   	}
 				});
 				return false;
@@ -136,7 +174,7 @@
 					data: "cmd=clients",
 					success: function(html){
 						//$("#usage").html(html);
-    						$('textarea').val(html);
+    						$('#usage').val(html);
 				   	}
 				});
 				return false;
@@ -151,7 +189,7 @@
 					data: "cmd=config",
 					success: function(html){
 						//$("#usage").html(html);
-    						$('textarea').val(html);
+    						$('#usage').val(html);
 				   	}
 				});
 				return false;
@@ -162,10 +200,8 @@
 			//$('#formSaveConfig').submit(function(){
 				$.ajax({
 					type: "POST",
-					//url: "/saveconfig",
 					url: Protocol+"//"+Host+":8084/api",
-					data: "cmd=save",
-					data: "text="+$("#usage").val(),
+					data: "cmd=save&text="+$("#usage").val(),
 					/*success: function(html){
 						//$("#usage").html(html);
     						$('textarea').val(html);
@@ -182,9 +218,38 @@
 					url: Protocol+"//"+Host+":8084/api",
 					data: "cmd=restore",
 					success: function(html){
-    						$('textarea').val(html);
+    						$('#usage').val(html);
 				   	}
 					
+				});
+				return false;
+			});
+			
+			
+			
+			
+			
+			
+			$('#btnTop').on('click',  function(){
+				$.ajax({
+					type: "POST",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=top",
+					success: function(html){
+    						$("#spar").val(html);
+				   	}
+				});
+				return false;
+			});
+			
+			$('#btnNetstat').on('click',  function(){
+				$.ajax({
+					type: "POST",
+					url: Protocol+"//"+Host+":8084/api",
+					data: "cmd=netstat",
+					success: function(html){
+    						$("#spar").val(html);
+				   	}
 				});
 				return false;
 			});
