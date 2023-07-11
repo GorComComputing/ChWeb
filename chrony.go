@@ -124,7 +124,7 @@ func scan() (Config, string) {
 		}
 	}
 	
-	fmt.Println(config)
+	//fmt.Println(config)
 	
 	// handle first encountered error while reading
 	if err := fileScanner.Err(); err != nil {
@@ -134,7 +134,7 @@ func scan() (Config, string) {
 	defer file.Close()
 	
 	dat, err := os.ReadFile("/etc/pzg-chrony.conf")
-    	fmt.Print(string(dat))
+    	//fmt.Print(string(dat))
 	
 	return config, string(dat)
 }

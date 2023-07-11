@@ -4,6 +4,7 @@ import (
 	//"fmt"
 	"net/http"
 	"io/ioutil"
+	"strings"
 )
 
 
@@ -21,8 +22,11 @@ func openDB(host string, port string) {
 // SQL-запрос к базе данных 
 func db_request(db_Query string) string {
 	var output string
-		
+	
+	db_Query = strings.Replace(db_Query, " ", "%20", -1)
 	resp, err := http.Get(db_host + ":" + db_port + "/api?cmd=" + db_Query)
+	
+	
 	if err != nil {
 		output = "Request FAIL: " + err.Error() + "\n"
 		return output

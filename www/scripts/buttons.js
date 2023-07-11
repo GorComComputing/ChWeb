@@ -2,6 +2,20 @@
 			var Protocol = window.location.protocol;
 			var Host = window.location.hostname;
 			
+			$('#formDeleteUser1').submit(function(){
+				$.ajax({
+					type: "POST",
+					//url: "/save",
+					url: Protocol+"//192.168.63.60:8086/api",  //url: Protocol+"//"+Host+":8086/api",
+					data: "cmd=delete from users where Id="+$("#id1").val(),
+					success: function(html){
+						$("#app").val(html);
+				   	}
+				});
+				return false;
+			});
+			
+			
 			
 			$('#formRunCmd').submit(function(){
 				$.ajax({

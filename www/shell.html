@@ -463,87 +463,10 @@ local stratum
     <h5 id="offcanvasTopLabel">WEB & SSH</h5>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
-  <div class="offcanvas-body d-flex">
+  <div class="offcanvas-body">
   
-  
-  <form > <input id="$skey" name="$skey" type="hidden" value="59628238228111433610624168193201077931192031085779184172417886149303326032145815385642411391">
-  <table>
-      <tr>
-        <td>Изменить пароль веб уч.записи admin:</td>
-        <td></td>
-        <td>Инфо:</td>
-      </tr>
-      <tr>
-        <td>Старый пароль уч.записи admin</td>
-        <td><input id="$oadp" name="$oadp" type="password" class="form-control"></td>
-        <td>Введите старый пароль</td>
-      </tr>
-      <tr>
-        <td>Новый пароль уч.записи admin</td>
-        <td><input id="$nap1" name="$nap1" type="password" class="form-control"></td>
-        <td>Введите новый пароль</td>
-      </tr>
-      <tr>
-        <td>Новый пароль уч.записи admin еще раз</td>
-        <td><input id="$nap2" name="$nap2" type="password" class="form-control"></td>
-        <td>Введите новый пароль</td>
-      </tr>
-      <tr>
-        <td>Изменить пароль веб уч.записи user:</td>
-        <td></td>
-        <td>Инфо:</td>
-      </tr>
-      <tr>
-        <td>Старый пароль уч.записи user</td>
-        <td><input id="$ousp" name="$ousp" type="password" class="form-control"></td>
-        <td>Введите старый пароль</td>
-      </tr>
-      <tr>
-        <td>Новый пароль уч.записи user</td>
-        <td><input id="$nup1" name="$nup1" type="password" class="form-control"></td>
-        <td>Введите новый пароль</td>
-      </tr>
-      <tr>
-        <td>Новый пароль уч.записи user еще раз</td>
-        <td><input id="$nup2" name="$nup2" type="password" class="form-control"></td>
-        <td>Введите новый пароль </td>
-      </tr>
-      <tr>
-        <td>Настройки Веб интерфейса:<br>
-        </td>
-        <td></td>
-        <td>Инфо:</td>
-      </tr>
-      <tr>
-        <td><input onchange="javascript:webo_func()" id="$webo" name="$webo" type="checkbox">Использовать Веб интерфейс</td>
-        <td></td>
-        <td>Включить/выключить данный Веб интерфейс.</td>
-      </tr>
-      <tr>
-        <td>Настройки SSH интерфейса:</td>
-        <td></td>
-        <td>Инфо:</td>
-      </tr>
-      <tr>
-        <td><input id="$ssho" name="$ssho" type="checkbox">Использовать SSH интерфейс</td>
-        <td></td>
-        <td>Включить/выключить SSH интерфейс.</td>
-      </tr>
-      <tr>
-        <td>Настройки лицевой панели:</td>
-        <td></td>
-        <td>Инфо:</td>
-      </tr>
-      <tr>
-        <td><input onchange="javascript:lcdo_func()" id="$lcdo" name="$lcdo" type="checkbox">Использовать пароль на лицевой
-панели</td>
-        <td><input maxlength="6" size="6" id="$lcdt" name="$lcdt" type="password" disabled="" class="form-control"></td>
-        <td>Включить/выключить пароль для настройки СТВ01/СТВ01Е через панель, 6 цифр</td>
-      </tr>
-  </table>
 
-  <p><input value="Сохранить настройки" type="submit" class="btn btn-outline-primary btn-sm add"></p>
-</form>
+  
 
 
    
@@ -564,7 +487,7 @@ local stratum
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Добавить устройство</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Добавить пользователя</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
       </div>
 	  <form action="/insert_device" method="POST">
@@ -599,9 +522,10 @@ local stratum
 <p id="app" class="bg-warning table-page">Для входа в систему нажмите кнопку Вход и введите логин и пароль</p>
 {{end}}
 
-{{if .UserName }}
+{{if eq .UserRole 1}}
 <div id="terminal-container"></div>
 <script defer src="/scripts/terminal.js"></script>
+
 {{else}}
 
 <table style="text-align: left; background-color: white; width: 80%; margin-left: auto; margin-right: auto;" border="0" cellpadding="0" cellspacing="1">
@@ -667,6 +591,215 @@ email: SUPPORT@ICBCOM.ru <br>
   </table>
 
 {{end}}
+
+
+
+
+
+
+
+
+
+
+<div>
+
+<table class="table table-bordered table-dark table-page">
+
+  <tr>
+    <th scope="col">id</th>
+    <th scope="col">Имя пользователя</th>
+    <th scope="col">Логин</th>
+    <th scope="col">Роль</th>
+	<th scope="col"></th>
+  </tr>
+
+
+  {{range .Users}}
+  <tr>
+    <td>{{ .Id }}</td>
+    <td class="name">{{ .UserName }}</td>
+    <td class="ipaddr">{{ .Login }}</td>
+    <td class="ipaddr">{{ .UserRole }}</td>
+
+<td class="flex">
+	<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ .Id }}">
+	Удалить
+	</button>	
+	
+	<button type="button" class="btn btn-primary btns btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal{{ .Id }}">
+		Изменить
+	</button>
+</td>
+
+
+
+<!-- Модальное окно ИЗМЕНИТЬ-->
+<div class="modal fade" id="updateModal{{ .Id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Изменить пользователя</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+	  <form action="/update_device" method="POST">
+	  
+      <div class="modal-body">
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Имя пользователя:</label>
+            <!--input type="text" class="form-control" id="recipient-name"-->
+			<input type="hidden" name="id" value={{ .Id }}>
+			<input type="text" class="form-control" name="name" id="name" value="{{ .UserName }}" />
+          </div>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Логин:</label>
+			<input type="text" class="form-control" name="ipaddr" id="ipaddr" value="{{ .Login }}" />
+            <!--textarea class="form-control" id="message-text"></textarea-->
+          </div>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Пароль:</label>
+			<input type="text" class="form-control" name="ipaddr" id="ipaddr" value="{{ .Pswd }}" />
+            <!--textarea class="form-control" id="message-text"></textarea-->
+          </div>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Роль:</label>
+			<input type="text" class="form-control" name="ipaddr" id="ipaddr" value="{{ .UserRole }}" />
+            <!--textarea class="form-control" id="message-text"></textarea-->
+          </div>
+		 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Изменить</button>
+      </div>
+	  </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- Модальное окно УДАЛИТЬ-->
+<div class="modal fade" id="deleteModal{{ .Id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Удалить пользователя?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+	  <form id="formDeleteUser{{ .Id }}">
+	
+      <div class="modal-body">
+		<label for="message-text" class="col-form-label">Вы действительно хотите удалить пользователя {{ .UserName }} ?</label>
+        <input type="hidden" name="id" id="id{{ .Id }}" value={{ .Id }}>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="submit" class="btn btn-primary">Удалить</button>
+      </div>
+	  </form>
+    </div>
+  </div>
+</div>
+
+<!--script>
+		$(document).ready(function(){
+			
+			$('#formDeleteUser{{ .Id }}').submit(function(){
+				$.ajax({
+					type: "POST",
+					//url: "/save",
+					url: "http://192.168.63.60:8086/api",  //url: Protocol+"//"+Host+":8086/api",
+					data: "cmd=delete from users where Id="+$("#id").val(),
+					success: function(html){
+						$("#app").val(html);
+				   	}
+				});
+				return false;
+			});
+		});
+</script-->
+
+
+	
+  </tr>
+  {{end}}
+</table>  
+
+</div>
+  
+  <form > <input id="$skey" name="$skey" type="hidden" value="59628238228111433610624168193201077931192031085779184172417886149303326032145815385642411391">
+  <table>
+      <!--tr>
+        <td>Изменить пароль веб уч.записи admin:</td>
+      </tr>
+      <tr>
+        <td>Старый пароль уч.записи admin</td>
+        <td><input id="$oadp" name="$oadp" type="password" class="form-control"></td>
+      </tr>
+      <tr>
+        <td>Новый пароль уч.записи admin</td>
+        <td><input id="$nap1" name="$nap1" type="password" class="form-control"></td>
+      </tr>
+      <tr>
+        <td>Новый пароль уч.записи admin еще раз</td>
+        <td><input id="$nap2" name="$nap2" type="password" class="form-control"></td>
+      </tr>
+      <tr>
+        <td>Изменить пароль веб уч.записи user:</td>
+      </tr>
+      <tr>
+        <td>Старый пароль уч.записи user</td>
+        <td><input id="$ousp" name="$ousp" type="password" class="form-control"></td>
+      </tr>
+      <tr>
+        <td>Новый пароль уч.записи user</td>
+        <td><input id="$nup1" name="$nup1" type="password" class="form-control"></td>
+      </tr>
+      <tr>
+        <td>Новый пароль уч.записи user еще раз</td>
+        <td><input id="$nup2" name="$nup2" type="password" class="form-control"></td>
+      </tr-->
+      <tr>
+        <td><input onchange="javascript:webo_func()" id="$webo" name="$webo" type="checkbox">Использовать Веб интерфейс</td>
+      </tr>
+      <tr>
+        <td><input id="$ssho" name="$ssho" type="checkbox">Использовать SSH интерфейс</td>
+      </tr>
+      <tr>
+        <td><input onchange="javascript:lcdo_func()" id="$lcdo" name="$lcdo" type="checkbox">Использовать пароль на лицевой
+панели</td>
+        <td><input maxlength="6" size="6" id="$lcdt" name="$lcdt" type="password" disabled="" class="form-control"></td>
+        <td>Включить/выключить пароль для настройки СТВ01/СТВ01Е через панель, 6 цифр</td>
+      </tr>
+  </table>
+
+  <p><input value="Сохранить настройки" type="submit" class="btn btn-outline-primary btn-sm add"></p>
+</form>
+
+
+
+<!-- Кнопка-триггер модального окна -->
+<button type="button" class="btn btn-outline-primary btn-sm add" data-bs-toggle="modal" data-bs-target="#insertModal">
+  Добавить
+</button> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
