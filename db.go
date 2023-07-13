@@ -24,8 +24,8 @@ func db_request(db_Query string) string {
 	var output string
 	
 	db_Query = strings.Replace(db_Query, " ", "%20", -1)
+	db_Query = strings.Replace(db_Query, ";", "%3b", -1)
 	resp, err := http.Get(db_host + ":" + db_port + "/api?cmd=" + db_Query)
-	
 	
 	if err != nil {
 		output = "Request FAIL: " + err.Error() + "\n"

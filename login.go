@@ -53,7 +53,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	//for rows.Next() {
 		openDB("http://192.168.63.60", "8086") // "http://192.168.1.136"  "http://192.168.63.60"
-		req := db_request("select * from users") 
+		req := db_request("select * from users;") 
 
 		strArr := strings.FieldsFunc(req, func(c rune) bool { return c == '\n' || c == '\r' })
 		for _, val := range strArr {
