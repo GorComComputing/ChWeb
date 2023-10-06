@@ -51,7 +51,8 @@ var bks ShellPage
 	
 	// Set page fields
 	bks.Message = "Message"
-	bks.UserName, bks.UserRole = check_cookies(w, r)
+	bks.UserName = "Test"
+	bks.UserRole = 1 //check_cookies(w, r)
 	bks.BackLink = "/"
 
 	
